@@ -41,3 +41,9 @@ gcloud compute firewall-rules create default-puma-server \
     --source-ranges 0.0.0.0/0 \
     --priority 1000 \
     --target-tags puma-server
+
+## Terraform
+Управление ssh ключами в метаданных проекта осуществляется через ресурсы
+`google_compute_project_metadata` и `google_compute_project_metadata_item`.
+Однако Terraform переписыват ключ `ssh-keys` целиком. Поэтому внесённые вручную
+изменения через web или gcloud будут перезаписаны при `terraform apply`.
