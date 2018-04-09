@@ -3,7 +3,7 @@
   hosts: reddit-app
   become: true
   vars:
-    db_host: 10.132.0.2
+    db_host: "{{hostvars['reddit-db'].internalIP}}"
   tasks:
     - name: Add unit file for Puma
       become: true
