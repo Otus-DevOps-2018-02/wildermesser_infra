@@ -75,3 +75,4 @@ gcloud compute firewall-rules create default-puma-server \
 - `packer_db.yml`, `packer_app.yml` - playbooks, которые заменяю bash скрипты подготовки соотвествующих образов для packer
 ## Dynamic inventory
 Использован node.js модуль gce-inventory для формирования динамического inventory. Конфигурация задана в файле `.gce-options`. Премуществом такого решения является отстуствие необходимости вручную ауктуализировать invenroty файл. А так же формирование дополнительных host переменных и групп хостов.
+Установить можно командой `npm install -g gce-inventory`
