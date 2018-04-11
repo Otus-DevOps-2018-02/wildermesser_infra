@@ -1,6 +1,6 @@
 ---
 - name: Configure application
-  hosts: app
+  hosts: reddit-app
   become: true
   roles:
     - app
