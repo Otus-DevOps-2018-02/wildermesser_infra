@@ -1,5 +1,5 @@
 # wildermesser_infra
-
+[![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/wildermesser_infra.svg?branch=ansible-3)](https://travis-ci.org/Otus-DevOps-2018-02/wildermesser_infra)
 ## Подключение через bastion хост одной строкой (ключ должен быть добавлен в ssh-agent)
     ssh -i appuser -J appuser@35.204.245.239 -A appuser@10.164.0.3
 
