@@ -2,8 +2,18 @@ dist: trusty
 sudo: required
 language: bash
 before_install:
-- curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-02/run.sh |
-  bash
+  - curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-02/run.sh | bash
+  - export REPODIR=`pwd`
+  - docker exec hw-test ansible-lint ansible/playbooks/*.yml
+  - docker exec hw-test terraform init terraform/stage
+  - docker exec hw-test terraform init terraform/prod
+  - docker exec hw-test ssh-keygen -q -P "" -t rsa -f /root/.ssh/id_rsa
+  - docker exec hw-test terraform validate -var-file=terraform/stage/terraform.tfvars.example terraform/stage
+  - docker exec hw-test terraform validate -var-file=terraform/prod/terraform.tfvars.example terraform/prod
+  - cd $REPODIR/terraform/stage && docker exec hw-test tflint --var-file=terraform.tfvars.example 
+  - cd $REPODIR/terraform/prod && docker exec hw-test tflint --var-file=terraform.tfvars.example 
+  - cd $REPODIR && docker exec hw-test packer validate -var-file=packer/variables.json.example packer/app.json
+  - cd $REPODIR && docker exec hw-test packer validate -var-file=packer/variables.json.example packer/db.json
 notifications:
   slack:
     secure: GFkAQaZFnUTUP7xySFHlHmDTZGG0U16/sqttVWZbcT44+NkzO1+miIAsENlmTzh3dj1LxxJdINI13WzS6beDqE8XbjdN8Ht1QYuAg6J/4e1WLkUnoYmwbYiszIs4KftAGckHMzAepI+EcWOgNWyHZf7Z2sO9RcT9DAWfOMU9/QLpiok8C9FtnKu38Xt98SwbYWqbnhh792GG9175oxzmWQ+D6J4mRFw5cWuBzIfdwIF8wcn2F5fQffjllU/LX9WtxTR3Stqlt8ZUWo1z8zVs46dRk1qeKcFSkNWhk3PZo74WMFkqS5V5yi1Cn1CWRVqpGNoXzzQ4HkctgoBe5kfU7F9jzQKEQMOiEvGznJ2ajJKwaOLxYRE1cKAokSS+GhBpfUcoWOflAqUZdE6LXUObbvvpeg0SrfMR9LIgspGY6qPiW/PFcq9FUrodVp6py4gbMQtJmSBIfQY27FQjoVUEADsLOAtShLN/NMGrjDkgjRJxdTgEphnAY+kqNjnqePh97j/VxOX0JuovsLSwYLRRRw/G06ZEz3i2Kl2a/vmcslYnfd3CJst8LxJW72Hr3qDcELN3XGU7NL+/hdfYfpQU7PI7bEJJ7ufy9YWYZkWpNrhtdGbDfFYKG6wUBs701gOIMjlgOt5HexSlpT3if4kZnYjX8QBxdn4N4CT00Kv0EfU=

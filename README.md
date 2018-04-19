@@ -1,5 +1,5 @@
 # wildermesser_infra
-
+[![Build Status](https://travis-ci.org/Otus-DevOps-2018-02/wildermesser_infra.svg?branch=ansible-3)](https://travis-ci.org/Otus-DevOps-2018-02/wildermesser_infra)
 ## Подключение через bastion хост одной строкой (ключ должен быть добавлен в ssh-agent)
     ssh -i appuser -J appuser@35.204.245.239 -A appuser@10.164.0.3
 
@@ -75,3 +75,12 @@ gcloud compute firewall-rules create default-puma-server \
 - `packer_db.yml`, `packer_app.yml` - playbooks, которые заменяю bash скрипты подготовки соотвествующих образов для packer
 ## Dynamic inventory
 Использован node.js модуль gce-inventory для формирования динамического inventory. Конфигурация задана в файле `.gce-options`. Премуществом такого решения является отстуствие необходимости вручную ауктуализировать invenroty файл. А так же формирование дополнительных host переменных и групп хостов.
+Установить можно командой `npm install -g gce-inventory`
+## Роли
+Созданы роли app и db, содержащие переменные со значениями по-умолчанию. Роли позволяют упростить переиспользование кода и его поддержку. Использована роль из ansible-galaxy для настройки nginх. Необходимые изменения в firewall внесены в terraform конфигурацию.
+## Окружения
+Созданые окружения stage и prod. Каждое имеет свой inventory и значение переменных, переданных через group vars.
+## Ansible Valt
+В каждом окружении созданые файлы credentials.yml, содержащие чувствительные данные. Чтобы хранить из в репозитории, использовно шифрование с помощью ansible vault
+## Дополнительные проверки репозитория при коммитах с помощью travis
+В файле `travis.yml` добавлены дополнительные проверки конфигурации packer, terraform и ansible
